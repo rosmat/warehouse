@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.time.Instant;
+import java.time.LocalDate;
 
 @Entity
 @Table
@@ -23,7 +23,7 @@ public class Statistic {
     @ManyToOne
     private Campaign campaign;
 
-    private Instant eventDate;
+    private LocalDate eventDate;
 
     private Long clicks;
 
