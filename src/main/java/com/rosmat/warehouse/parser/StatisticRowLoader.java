@@ -35,7 +35,7 @@ public class StatisticRowLoader {
                 .stream().map(row -> Statistic.builder().datasource(datasourceNameToIdMap.get(row.getDatasourceName()))
                         .campaign(campaignNameToIdMap.get(row.getCampaignName()))
                         .eventDate(row.getEventDate())
-                        .clicks(row.getClicks()).impressions(row.getImpressions()).build()).toList();
+                        .clicks(row.getClicks()).impressions(row.getImpressions()).build()).collect(Collectors.toList());
 
         statisticRepository.saveAllAndFlush(statisticList);
     }
@@ -49,7 +49,7 @@ public class StatisticRowLoader {
         List<Datasource> dataSourceList = datasourceNameSet
                 .stream()
                 .map(name -> Datasource.builder().name(name).build())
-                .toList();
+                .collect(Collectors.toList());
 
         return datasourceRepository.saveAllAndFlush(dataSourceList)
                 .stream()
@@ -65,7 +65,7 @@ public class StatisticRowLoader {
         List<Campaign> campaignList = campaignNameSet
                 .stream()
                 .map(name -> Campaign.builder().name(name).build())
-                .toList();
+                .collect(Collectors.toList());
 
         return campaignRepository.saveAllAndFlush(campaignList)
                 .stream()
