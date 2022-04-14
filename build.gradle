@@ -24,13 +24,24 @@ repositories {
 }
 
 dependencies {
+	def querydslVersion = '5.0.0'
+	def lombokVersion = '1.18.22'
+
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.data:spring-data-commons:2.6.3'
 	implementation 'com.opencsv:opencsv:5.6'
-	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'org.postgresql:postgresql'
-	annotationProcessor 'org.projectlombok:lombok'
+	implementation "com.querydsl:querydsl-jpa:${querydslVersion}"
+
+	compileOnly "org.projectlombok:lombok:${lombokVersion}"
+
+	runtimeOnly 'org.postgresql:postgresql:42.3.3'
+
+	annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+	annotationProcessor "com.querydsl:querydsl-apt:${querydslVersion}:jpa"
+	annotationProcessor 'org.springframework.boot:spring-boot-starter-data-jpa' //this is needed to make querydsl-apt work
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
