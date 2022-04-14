@@ -17,8 +17,14 @@ class StatisticsControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    void shouldReturnOk() throws Exception {
+    void shouldStatisticsReturnOk() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/statistics"))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    void shouldReportReturnOk() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/statistics/report?aggregationFunctionEnum=COUNT&groupingParamEnum=DATASOURCE&aggregationParamEnum=IMPRESSIONS"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 }

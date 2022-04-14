@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface StatisticRepository extends JpaRepository<Statistic, Long>, QuerydslPredicateExecutor<Statistic>,
-        QuerydslBinderCustomizer<QStatistic> {
+        QuerydslBinderCustomizer<QStatistic>, GroupingByStatisticCustomRepository {
 
     @Override
     default void customize(QuerydslBindings bindings, QStatistic root) {
