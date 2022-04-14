@@ -1,8 +1,8 @@
 package com.rosmat.warehouse.model.repository;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +29,7 @@ public class GroupingByStatisticCustomRepositoryImpl implements GroupingByStatis
     private static final Map<GroupingParamEnum, Path> groupingParamEnumPathMap = Map.of(
             GroupingParamEnum.DATASOURCE, statistic.datasource.name,
             GroupingParamEnum.CAMPAIGN, statistic.campaign.name,
-            GroupingParamEnum.DATE, statistic.campaign.name
+            GroupingParamEnum.DATE, statistic.eventDate
     );
 
     private static final Map<AggregationParamEnum, NumberPath<Long>> aggregationParamEnumPathMap = Map.of(
@@ -47,14 +48,16 @@ public class GroupingByStatisticCustomRepositoryImpl implements GroupingByStatis
         NumberPath<Long> aggregateByPath = aggregationParamEnumPathMap.get(aggregationParamEnum);
         NumberExpression aggregationFunction = getAggregationFunction(aggregateByPath, aggregationFunctionEnum);
 
-        JPAQuery<StatisticReportDto> query = new JPAQuery<>(entityManager)
-                .select(Projections.bean(StatisticReportDto.class,
-                        groupByPath,
-                        aggregationFunction.as(StatisticReportDto.getValueFieldName())))
+        List<Tuple> tupleList = new JPAQuery<>(entityManager)
+                .select(groupByPath, aggregationFunction.as(StatisticReportDto.getValueFieldName()))
                 .from(statistic)
                 .where(predicate)
-                .groupBy(groupByPath);
-        return query.fetch();
+                .groupBy(groupByPath)
+                .fetch();
+
+        List<StatisticReportDto> resultList = new ArrayList<>();
+        tupleList.forEach(tuple -> resultList.add(new StatisticReportDto(tuple.get(0, Object.class).toString(), tuple.get(1, Number.class))));
+        return resultList;
     }
 
     private NumberExpression getAggregationFunction(NumberPath<Long> numberPath, AggregationFunctionEnum aggregationFunctionEnum) {
