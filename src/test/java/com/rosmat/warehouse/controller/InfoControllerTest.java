@@ -12,14 +12,21 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-class HelloControllerTest {
+class InfoControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
     @Test
-    void shouldReturnOk() throws Exception {
+    void shouldStatusReturnOk() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/amiworking"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().string("I am working."));
+    }
+
+    @Test
+    void shouldInfoReturnOk() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().string("Simple Data Warehouse"));
     }
 }
