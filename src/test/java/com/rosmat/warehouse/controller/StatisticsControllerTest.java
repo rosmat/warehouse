@@ -26,5 +26,35 @@ class StatisticsControllerTest {
     void shouldReportReturnOk() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/statistics/report?aggregationFunctionEnum=COUNT&groupingParamEnum=DATASOURCE&aggregationParamEnum=IMPRESSIONS"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/statistics/report?aggregationFunctionEnum=SUM&groupingParamEnum=CAMPAIGN&aggregationParamEnum=IMPRESSIONS"))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/statistics/report?aggregationFunctionEnum=AVG&groupingParamEnum=DATE&aggregationParamEnum=IMPRESSIONS"))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/statistics/report?aggregationFunctionEnum=MAX&groupingParamEnum=DATASOURCE&aggregationParamEnum=CLICKS"))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/statistics/report?aggregationFunctionEnum=MIN&groupingParamEnum=CAMPAIGN&aggregationParamEnum=CLICKS"))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    void shouldReportReturn400() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/statistics/report"))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.content().string(org.hamcrest.Matchers.containsString("groupingParamEnum")))
+                .andExpect(MockMvcResultMatchers.content().string(org.hamcrest.Matchers.containsString("aggregationFunctionEnum")))
+                .andExpect(MockMvcResultMatchers.content().string(org.hamcrest.Matchers.containsString("aggregationParamEnum")));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/statistics/report?groupingParamEnum=DATASOURCE"))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.content().string(org.hamcrest.Matchers.containsString("aggregationFunctionEnum")))
+                .andExpect(MockMvcResultMatchers.content().string(org.hamcrest.Matchers.containsString("aggregationParamEnum")));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/statistics/report?groupingParamEnum=DATASOURCE&aggregationFunctionEnum=COUNT"))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.content().string(org.hamcrest.Matchers.containsString("aggregationParamEnum")));
     }
 }
