@@ -12,7 +12,7 @@ class ImportDataFromCSVTest {
 
     @Test
     void shouldParseWithoutException() throws IOException {
-        List<StatisticRow> statisticRowList = ImportDataFromCSV.parse("src/test/resources/statistics_test.csv");
+        List<StatisticRow> statisticRowList = new ImportDataFromCSV().parse("statistics_test.csv");
         assertThat(statisticRowList).isNotNull();
         assertThat(statisticRowList).hasSize(10);
 

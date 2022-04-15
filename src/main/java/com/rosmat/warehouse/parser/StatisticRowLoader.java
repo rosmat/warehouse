@@ -27,7 +27,7 @@ public class StatisticRowLoader {
     }
 
     public void importDataFromCsvToDatabase() throws IOException {
-        List<StatisticRow> statisticRowList = ImportDataFromCSV.parse("src/main/resources/statistics.csv"); //TODO: move to properties
+        List<StatisticRow> statisticRowList = new ImportDataFromCSV().parse("statistics.csv"); //TODO: move to properties
         Map<String, Datasource> datasourceNameToIdMap = getDatasourceNameToEntityMap(statisticRowList);
         Map<String, Campaign> campaignNameToIdMap = getCampaignNameToEntityMap(statisticRowList);
 
